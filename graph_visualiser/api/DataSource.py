@@ -3,39 +3,39 @@ from abc import ABC, abstractmethod
 
 class DataSource(ABC):
     def __init__(self, *args, **kwargs):
-        # Ovde možete inicijalizovati zajedničke promenljive ili parametre
+        # Here you can initialize common variables or parameters
         pass
 
     @abstractmethod
     def parse_data(self, data):
         """
-        Metoda za parsiranje podataka i formiranje grafa.
+        Method for parsing data and forming a graph.
 
         Parameters:
-        - data: Podaci iz izvora, kao što su JSON, XML, CSV, itd.
+        - data: Data from the source, such as JSON, XML, CSV, etc.
 
         Returns:
-        - Graph: Struktura podataka koja predstavlja graf.
+        - Graph: Data structure representing a graph.
         """
         pass
 
     @abstractmethod
     def configure(self, *args, **kwargs):
         """
-        Metoda za konfiguraciju izvora podataka.
+        Method for configuring the data source.
 
         Parameters:
-        - args: Dodatni argumenti potrebni za konfiguraciju.
-        - kwargs: Dodatni ključ-vrednost argumenti potrebni za konfiguraciju.
+        - args: Additional arguments needed for configuration.
+        - kwargs: Additional key-value arguments needed for configuration.
         """
         pass
 
     @abstractmethod
     def get_required_parameters(self):
         """
-        Metoda koja vraća listu obaveznih ulaznih parametara za određeni izvor podataka.
+        Method that returns a list of required input parameters for a specific data source.
 
         Returns:
-        - List[str]: Lista obaveznih ulaznih parametara.
+        - List[str]: List of required input parameters.
         """
         pass
