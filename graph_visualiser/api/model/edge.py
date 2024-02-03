@@ -1,4 +1,4 @@
-from api.model.node import Node
+from graph_visualiser.api.model.node import Node
 
 
 class Edge:

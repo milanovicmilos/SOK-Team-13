@@ -1,21 +1,23 @@
-from typing import Optional
-
-from api.model.edge import Edge
-from api.model.node import Node
+from graph_visualiser.api.model.node import Node
+from typing import Optional, List
+from graph_visualiser.api.model.edge import Edge
 
 
 class Graph:
-
-    def __init__(self, nodes: list[Node] = None, edges: list[Edge] = None):
+    """
+    This class represents a graph data structure. It contains methods for adding and removing nodes and edges,
+    finding a node by its id, and getting the edges associated with a node.
+    """
+    def __init__(self, nodes: List[Node] = None, edges: List[Edge] = None):
         self._nodes = nodes or []
         self._edges = edges or []
 
     @property
-    def nodes(self) -> list[Node]:
+    def nodes(self) -> List[Node]:
         return self._nodes
 
     @property
-    def edges(self) -> list[Edge]:
+    def edges(self) -> List[Edge]:
         return self._edges
 
     def add_node(self, node: Node):
@@ -36,13 +38,13 @@ class Graph:
                 return node
         return None
 
-    def get_node_edges(self, node: Node) -> list[Edge]:
+    def get_node_edges(self, node: Node) -> List[Edge]:
         return [edge for edge in self._edges if node in (edge.source_node, edge.target_node)]
 
-    def get_node_source_edges(self, node: Node) -> list[Edge]:
+    def get_node_source_edges(self, node: Node) -> List[Edge]:
         return [edge for edge in self._edges if edge.source_node == node]
 
-    def get_node_target_edges(self, node: Node) -> list[Edge]:
+    def get_node_target_edges(self, node: Node) -> List[Edge]:
         return [edge for edge in self._edges if edge.target_node == node]
 
 
