@@ -1,6 +1,7 @@
-from graph_visualiser.api.model.node import Node
+from api.exception.graph_exception import GraphException
+from api.model.edge import Edge
+from api.model.node import Node
 from typing import Optional, List
-from graph_visualiser.api.model.edge import Edge
 
 
 class Graph:
@@ -21,15 +22,24 @@ class Graph:
         return self._edges
 
     def add_node(self, node: Node):
+        if node in self._nodes:
+            raise GraphException("Node already exists")
         self._nodes.append(node)
 
     def add_edge(self, edge: Edge):
+        if edge in self._edges:
+            raise GraphException("Edge already exists")
         self._edges.append(edge)
 
     def remove_node(self, node: Node):
+        if node not in self._nodes:
+            raise GraphException("Node does not exist")
+        self._edges = [edge for edge in self._edges if node not in (edge.source_node, edge.target_node)]
         self._nodes.remove(node)
 
     def remove_edge(self, edge: Edge):
+        if edge not in self._edges:
+            raise GraphException("Edge does not exist")
         self._edges.remove(edge)
 
     def find_node_by_id(self, node_id: int) -> Optional[Node]:
