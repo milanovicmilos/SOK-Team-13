@@ -38,6 +38,7 @@ def main():
                 if 1 <= plugin_number <= len(plugins):
                     selected_plugin = plugins[plugin_number - 1]
                     print(f"You selected: {selected_plugin}")
+                    # Add your logic for using the selected plugin here
                     graph = selected_plugin.get_graph()
                     print("Graph created successfully.")
                     print(graph)

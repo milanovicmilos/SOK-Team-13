@@ -1,0 +1,2 @@
+[graph_visualiser.data_source]
+html = data_source_plugin_html:DataSourceHTML
