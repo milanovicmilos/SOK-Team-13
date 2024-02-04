@@ -1,0 +1,3 @@
+[console_scripts]
+graph_visualiser = graph_visualiser.main:main
+

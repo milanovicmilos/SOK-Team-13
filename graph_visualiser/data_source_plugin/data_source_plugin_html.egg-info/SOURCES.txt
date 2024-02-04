@@ -1,0 +1,12 @@
+setup.py
+data_source_plugin_html/__init__.py
+data_source_plugin_html/data_source_plugin_html.py
+data_source_plugin_html.egg-info/PKG-INFO
+data_source_plugin_html.egg-info/SOURCES.txt
+data_source_plugin_html.egg-info/dependency_links.txt
+data_source_plugin_html.egg-info/entry_points.txt
+data_source_plugin_html.egg-info/requires.txt
+data_source_plugin_html.egg-info/top_level.txt
+data_source_plugin_json/__init__.py
+data_source_plugin_json/data_source_plagin_json.py
+data_source_plugin_json/setup.py
