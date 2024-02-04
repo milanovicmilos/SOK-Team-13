@@ -46,7 +46,6 @@ class WikiDataGetter:
     def get_node_html_data(self) -> str or None:
         """
         Method for getting the HTML content of the node.
-        :return:
         """
         body_content_div = self.get_body_content_div()
 
@@ -64,7 +63,6 @@ class WikiDataGetter:
     def get_node_json_data(self) -> dict or None:
         """
         Method for getting the JSON data of the node.
-        :return:
         """
         body_content_div = self.get_body_content_div()
 
