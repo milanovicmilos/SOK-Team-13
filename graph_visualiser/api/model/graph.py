@@ -1,7 +1,7 @@
-from api.exception.graph_exception import GraphException
-from api.model.edge import Edge
-from api.model.node import Node
 from typing import Optional, List
+
+from graph_visualiser.api.model.edge import Edge
+from graph_visualiser.api.model.node import Node
 
 
 class Graph:
@@ -9,6 +9,7 @@ class Graph:
     This class represents a graph data structure. It contains methods for adding and removing nodes and edges,
     finding a node by its id, and getting the edges associated with a node.
     """
+
     def __init__(self, nodes: List[Node] = None, edges: List[Edge] = None):
         self._nodes = nodes or []
         self._edges = edges or []
@@ -22,24 +23,30 @@ class Graph:
         return self._edges
 
     def add_node(self, node: Node):
-        if node in self._nodes:
-            raise GraphException("Node already exists")
+        if any(existing_node.node_id == node.node_id for existing_node in self._nodes):
+            # raise GraphException("Node already exists")
+            return
         self._nodes.append(node)
 
     def add_edge(self, edge: Edge):
-        if edge in self._edges:
-            raise GraphException("Edge already exists")
+        if any(
+                existing_edge.source_node.node_id == edge.source_node.node_id and existing_edge.target_node.node_id == edge.target_node.node_id
+                for existing_edge in self._edges):
+            # raise GraphException("Edge already exists")
+            return
         self._edges.append(edge)
 
     def remove_node(self, node: Node):
         if node not in self._nodes:
-            raise GraphException("Node does not exist")
+            # raise GraphException("Node does not exist")
+            return
         self._edges = [edge for edge in self._edges if node not in (edge.source_node, edge.target_node)]
         self._nodes.remove(node)
 
     def remove_edge(self, edge: Edge):
         if edge not in self._edges:
-            raise GraphException("Edge does not exist")
+            # raise GraphException("Edge does not exist")
+            return
         self._edges.remove(edge)
 
     def find_node_by_id(self, node_id: int) -> Optional[Node]:

@@ -15,4 +15,3 @@ class Node:
     def data(self) -> Any:
         return self._data
 
-
