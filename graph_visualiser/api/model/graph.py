@@ -47,4 +47,5 @@ class Graph:
     def get_node_target_edges(self, node: Node) -> List[Edge]:
         return [edge for edge in self._edges if edge.target_node == node]
 
-
+    def get_graph_size(self) -> int:
+        return len(self._nodes)

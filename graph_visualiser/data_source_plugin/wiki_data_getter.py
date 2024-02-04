@@ -9,6 +9,9 @@ class WikiDataGetter:
     def __init__(self, url):
         self.url = url
 
+    def set_url(self, url):
+        self.url = url
+
     def get_soup(self):
         response = requests.get(self.url)
 
@@ -24,28 +27,28 @@ class WikiDataGetter:
             return soup.find('div', {'id': 'bodyContent'})
         return None
 
-    def get_html_data(self):
+    def get_node_html_data(self):
         body_content_div = self.get_body_content_div()
 
         if body_content_div:
             links = set(islice(
                 (urljoin(self.url, link.get('href')) for link in body_content_div.find_all('a', href=True) if
                  '/wiki' in link.get('href') and not link.get('href').endswith(('.png', '.jpg', '.jpeg', '.svg'))),
-                30))
+                10))
 
             return body_content_div.prettify(), links
         else:
             print("Div with id 'bodyContent' not found.")
             return None, None
 
-    def get_json_data(self):
+    def get_node_json_data(self):
         body_content_div = self.get_body_content_div()
 
         if body_content_div:
             links = set(islice(
                 (urljoin(self.url, link.get('href')) for link in body_content_div.find_all('a', href=True) if
                  '/wiki' in link.get('href') and not link.get('href').endswith(('.png', '.jpg', '.jpeg', '.svg'))),
-                30))
+                10))
 
             html_content, links = body_content_div.prettify(), links
             data = {
