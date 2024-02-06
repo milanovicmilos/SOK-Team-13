@@ -7,7 +7,7 @@ class D3PrimeriConfig(AppConfig):
     plugini_ucitavanje = []
 
     def ready(self):
-        self.plugini_ucitavanje = load_plugins("graph_visualiser.data_source")
+        self.plugini_ucitavanje = load_plugins("graph_visualiser.data_source_plugin")
 
 
 def load_plugins(oznaka):
