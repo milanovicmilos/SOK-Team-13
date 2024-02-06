@@ -70,3 +70,9 @@ class DataSourceHTML(DataSource):
         """
         edge = Edge(current_node, node)
         self.graph.add_edge(edge)
+
+    def identifier(self):
+        return "HTML"
+
+    def naziv(self):
+        return "HTML"
