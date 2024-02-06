@@ -69,3 +69,11 @@ class DataSource(ABC):
         - current_node (Node): Current node.
         """
         pass
+
+    @abstractmethod
+    def identifier(self):
+        pass
+
+    @abstractmethod
+    def naziv(self):
+        pass
