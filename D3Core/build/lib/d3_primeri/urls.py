@@ -12,4 +12,7 @@ urlpatterns = [
     path('primer/prodavnica/tree/layout', prodavnica_view.tree_layout, name="prodavnica_tree_layout"),
 
     path('primer/pan/zoom', views.primerPanZoom, name="primerPanZoom"),
+
+
+    path('ucitavanje/plugin/visualizer/<str:id>', views.ucitavanje_plugin_visualizer, name="ucitavanje_plugin_visualizer"),
 ]

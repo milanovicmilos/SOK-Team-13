@@ -6,6 +6,7 @@ REM and run a Django website.
 call :lay_egs "./D3Core"
 call :lay_egs "./graph_visualiser/data_source_plugin/data_source_plugin_json"
 call :lay_egs "./graph_visualiser/data_source_plugin/data_source_plugin_html"
+call :lay_egs "./graph_visualiser/block_visualiser"
 
 call :run_server "django_project"
 goto :eof

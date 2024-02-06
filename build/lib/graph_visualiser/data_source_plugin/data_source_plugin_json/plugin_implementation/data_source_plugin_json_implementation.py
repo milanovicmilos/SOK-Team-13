@@ -42,3 +42,9 @@ class DataSourceJSON(DataSource):
     def create_edge(self, node: Node, current_node: Node) -> None:
         edge = Edge(current_node, node)
         self.graph.add_edge(edge)
+
+    def identifier(self):
+        return "JSON"
+
+    def naziv(self):
+        return "JSON"
