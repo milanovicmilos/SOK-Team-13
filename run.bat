@@ -12,13 +12,13 @@ goto :eof
 
 :lay_egs
 REM The directory path is sent as the first argument
-"C:\Users\Milos\.virtualenvs\SOK-Team-13\Scripts\python.exe" -m pip install %1
+"D:\Faks\SOK\venv\Scripts\python.exe" -m pip install %1
 goto :eof
 
 :run_server
 REM The Django website path is sent as the first argument
 cd %1
-"C:\Users\Milos\.virtualenvs\SOK-Team-13\Scripts\python.exe" manage.py makemigrations
-"C:\Users\Milos\.virtualenvs\SOK-Team-13\Scripts\python.exe" manage.py migrate
-"C:\Users\Milos\.virtualenvs\SOK-Team-13\Scripts\python.exe" manage.py runserver
+"D:\Faks\SOK\venv\Scripts\python.exe" manage.py makemigrations
+"D:\Faks\SOK\venv\Scripts\python.exe" manage.py migrate
+"D:\Faks\SOK\venv\Scripts\python.exe" manage.py runserver
 goto :eof
