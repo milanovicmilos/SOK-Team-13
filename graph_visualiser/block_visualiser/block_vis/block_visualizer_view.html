@@ -30,58 +30,30 @@
     // Cvorovi grafa predstavljalu prodavnice i artikli.
     var nodes = {
         {% for  node in graph.nodes %}
-            "{{ node.node_id }}": {
-                id: "{{ node.node_id }}"
-            },
+            "{{ node.node_id }}": {{ node.parsed_data }},
         {% endfor %}
     };
 
-    {#var nodes = {#}
-    {#    {% for  node in graph.nodes %}#}
-    {#        "{{ node.node_id }}": parseNodeData({{ node.data|tojson|safe }}, "{{ node.node_id }}"),#}
-    {#    {% endfor %}#}
 
-    function parseNodeData(htmlBody, nodeId) {
-    var infoboxLabelRegex = /infobox-label[^>]*>([^<]*)</g;
-    var infoboxDataRegex = /infobox-data[^>]*>([^<]*)</g;
-
-    var matches = {};
-    var labelMatch;
-    var counter = 0;
-    {#while ((labelMatch = infoboxLabelRegex.exec(htmlBody)) !== null || counter < 5) {#}
-    {#    var labelText = labelMatch[1].trim();#}
-    {##}
-    {#    // Find infobox-data that comes after the current infobox-label#}
-    {#    var dataMatch = infoboxDataRegex.exec(htmlBody);#}
-    {##}
-    {#    if (dataMatch) {#}
-    {#        counter ++;#}
-    {#        var dataText = dataMatch[1].trim();#}
-    {#        matches[labelText] = dataText;#}
-    {##}
-    {#        // Set the lastIndex of infoboxLabelRegex to continue from the end of the last match#}
-    {#        infoboxLabelRegex.lastIndex = infoboxDataRegex.lastIndex;#}
-    {#    }#}
-
-    matches["node_id"] = nodeId;
-
-    return matches;
-}
     function urlToValidId(url) {
         // Replace invalid characters with underscores
         return url.replace(/[^a-zA-Z0-9-_]/g, '_');
     }
 
     function urlToValidName(url) {
-      // Match the part of the URL that comes after '/wiki/'
-      var match = /\/wiki\/(.*)/.exec(url);
+        const regex = /([^\/#]+)(?:\/([^#]+))?#([^#]+)?$/;
+        const match = url.match(regex);
 
-      // If there's a match, return the captured title; otherwise, return the original URL
-      return match ? match[1] : url;
+        if (match) {
+            const [, lastSegment, innerSegment, lastHashSegment] = match;
+            return lastHashSegment ? lastHashSegment : innerSegment ? innerSegment : lastSegment;
+        }
+
+        // If there's no match, return the original URL
+        return url;
     }
-    // Ivice grafa povezuju prodavnicu sa artiklom.
-    // "source" atribut predstavlja string identifikator prodavnice
-    // "traget" atribut predstavlja string identifikator artikla
+
+
     var links=[
         {% for edge in graph.edges %}
             {
@@ -183,6 +155,16 @@
                 .attr('font-family', 'sans-serif')
                 .attr('fill', 'black')
                 .text(key + ": " + urlToValidName(d[key]));
+            }else if (!["index", "px", "py", "weight", "x", "y"].includes(key)) {
+                d3.select("g#" + urlToValidId(d.id))
+                    .append('text')
+                    .attr('x', 0)
+                    .attr('y', 20 + iterationIndex * textSize)
+                    .attr('text-anchor', 'start')
+                    .attr('font-size', textSize)
+                    .attr('font-family', 'sans-serif')
+                    .attr('fill', 'black')
+                    .text(key + ": " + d[key]);
             }
 
             iterationIndex++

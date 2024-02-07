@@ -1,2 +1,0 @@
-[graph_visualiser.visualizer]
-block_visualiser = block_vis.block_visualizer:BlockVisualiser
