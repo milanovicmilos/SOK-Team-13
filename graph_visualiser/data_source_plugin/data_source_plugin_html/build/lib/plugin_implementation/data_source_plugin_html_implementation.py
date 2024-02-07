@@ -49,7 +49,7 @@ class DataSourceHTML(DataSource):
         :param depth:
         :return:
         """
-        if self.graph.get_graph_size() > 60:
+        if self.graph.get_graph_size() > 5:
             return
         if depth > 3:
             return

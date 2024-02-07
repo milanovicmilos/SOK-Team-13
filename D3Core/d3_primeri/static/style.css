@@ -3,30 +3,73 @@ svg{
   }
 
 .left {
-  margin: 0px;
   float: left;
-  width: 30%;
+  width: 20%;
+  height: 100%;
 
 }
-.header, .footer{
-  background-color: lightblue;
-  clear: left;
-  width:100%;
-  border: solid black 1px;
+
+.right {
+  float: right;
+  width: 30%;
+  height: 100%;
 }
+
+.header {
+    background-color: #ea983f;
+    width: 100%;
+    border: solid black 1px;
+    position: fixed; /* Fix the header at the top */
+    top: 0; /* Stick it to the top */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.header div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header a {
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.header button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.header input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+
+.footer {
+  background-color: #ea983f;
+  width: 100%;
+  border: solid black 1px;
+  position: fixed; /* Fix the footer at the bottom */
+  bottom: 0; /* Stick it to the bottom */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
 
 .center{
- margin-left: 30%;
- width: 70%;
- border-left: solid black 1px;
+  margin: 10% 30% 10% 20%;
+ width: 50%;
 }
 
 
 .page{
+  align-content: center;
   text-align: center;
-  margin: auto;
-  min-width: 50%;
-  width: 80%;
+  min-width: 100%;
+  width: 100%;
 }
 
 table{
@@ -39,4 +82,27 @@ table{
 
 .greska{
   color: red;
+}
+
+.vertical-line {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 1px; /* Width of the vertical line */
+  background-color: black; /* Color of the vertical line */
+}
+
+.left-line {
+  left: 20%; /* Position the left line at 20% of the width from the left */
+}
+
+.right-line {
+  left: 70%; /* Position the right line at 70% of the width from the left */
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
 }
