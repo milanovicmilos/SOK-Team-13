@@ -16,7 +16,7 @@
 </style>
 <script>
     function nodeClick(el){
-       alert("ID: "+el.id);
+       //alert("ID: "+el.id);
 
     }
 </script>
@@ -83,8 +83,9 @@
     .attr('height', '450') // Set the height to 100% of the parent container
     .style('border', '1px solid black') // Add border style
     .call(d3.behavior.zoom().on("zoom", function () {
-        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
-    }))
+        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "wheel") {
+            svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+        }}))
     .append('g'); // Append a group element for content
 
 // Define the viewBox and preserveAspectRatio attributes for a fixed-size view
