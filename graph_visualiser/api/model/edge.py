@@ -1,3 +1,6 @@
+from graph_visualiser.api.model.node import Node
+
+
 class Edge:
 
     def __init__(self, source_node: Node, target_node: Node):
