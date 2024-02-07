@@ -1,8 +1,10 @@
+
 from html import unescape
 from typing import Any
 import re
-
 from bs4 import BeautifulSoup
+from typing import Any
+
 
 
 class Node:
@@ -12,6 +14,7 @@ class Node:
         self._data = data
         self._parsed_data = self.parse_node_data()
 
+
     @property
     def node_id(self) -> str:
         return self._node_id
@@ -19,6 +22,7 @@ class Node:
     @property
     def data(self) -> Any:
         return self._data
+
 
     @property
     def parsed_data(self) -> {}:
@@ -79,3 +83,4 @@ class Node:
 
         # If there's no match, return the original URL
         return self._node_id
+
