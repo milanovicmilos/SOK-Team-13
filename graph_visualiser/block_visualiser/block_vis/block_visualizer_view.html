@@ -41,12 +41,12 @@
     }
 
     function urlToValidName(url) {
-        const regex = /([^\/#]+)(?:\/([^#]+))?#([^#]+)?$/;
+       const regex = /[^/]*(?:\/([^\/#]+))?(?:#([^#]+))?$/;
         const match = url.match(regex);
 
         if (match) {
-            const [, lastSegment, innerSegment, lastHashSegment] = match;
-            return lastHashSegment ? lastHashSegment : innerSegment ? innerSegment : lastSegment;
+            const [ , lastSegment, fragment ] = match;
+            return fragment ? fragment : lastSegment;
         }
 
         // If there's no match, return the original URL

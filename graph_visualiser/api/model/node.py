@@ -70,12 +70,12 @@ class Node:
         return matches
 
     def url_to_valid_name(self):
-        regex = re.compile(r'([^\/#]+)(?:\/([^#]+))?#([^#]+)?$')
+        regex = re.compile(r'[^\/]*(?:\/([^\/#]+))?(?:#([^#]+))?$')
         match = regex.match(self._node_id)
-        print(match.groups())
+
         if match:
-            last_segment, inner_segment, last_hash_segment = match.groups()
-            return last_hash_segment if last_hash_segment else inner_segment if inner_segment else last_segment
+            last_segment, fragment = match.groups()
+            return fragment if fragment else last_segment
 
         # If there's no match, return the original URL
         return self._node_id
