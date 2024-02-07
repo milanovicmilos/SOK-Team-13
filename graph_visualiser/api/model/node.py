@@ -48,26 +48,27 @@ class Node:
 
             # Find the parent tr element
             tr_element = infobox_label_element.find_parent("tr")
+
             print(tr_element)
-            # Find the next sibling td with the class infobox-data
-            infobox_data_element = tr_element.find_next_sibling("tr").find("td", class_="infobox-data")
-            print(infobox_data_element)
+            if tr_element.find_next_sibling("tr") is not None:
+                infobox_data_element = tr_element.find_next_sibling("tr").find("td", class_="infobox-data")
+                print(infobox_data_element)
 
-            if infobox_data_element:
-                counter += 1
+                if infobox_data_element:
+                    counter += 1
 
-                # Extract the text content from the infobox-data element
-                data_text = unescape(infobox_data_element.get_text(separator=' ', strip=True))
-                print(data_text)
-                # Check if there is an <a> tag inside infobox-data
-                a_tag = infobox_data_element.find("a")
-                if a_tag:
-                    # If <a> tag is present, extract its text content
-                    a_text = unescape(a_tag.get_text(separator=' ', strip=True))
-                    matches[label_text] = a_text
-                else:
-                    # If no <a> tag, use the text content of infobox-data
-                    matches[label_text] = data_text
+                    # Extract the text content from the infobox-data element
+                    data_text = unescape(infobox_data_element.get_text(separator=' ', strip=True))
+                    print(data_text)
+                    # Check if there is an <a> tag inside infobox-data
+                    a_tag = infobox_data_element.find("a")
+                    if a_tag:
+                        # If <a> tag is present, extract its text content
+                        a_text = unescape(a_tag.get_text(separator=' ', strip=True))
+                        matches[label_text] = a_text
+                    else:
+                        # If no <a> tag, use the text content of infobox-data
+                        matches[label_text] = data_text
 
         matches['id'] = self.url_to_valid_name()
 
