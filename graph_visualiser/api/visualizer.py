@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from build.lib.graph_visualiser.api.model.graph import Graph
+from graph_visualiser.api.model.graph import Graph
 
 
 class Visualizer(ABC):

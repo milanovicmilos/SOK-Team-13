@@ -1,9 +1,0 @@
-setup.py
-block_vis/__init__.py
-block_vis/block_visualizer.py
-block_visualiser.egg-info/PKG-INFO
-block_visualiser.egg-info/SOURCES.txt
-block_visualiser.egg-info/dependency_links.txt
-block_visualiser.egg-info/entry_points.txt
-block_visualiser.egg-info/requires.txt
-block_visualiser.egg-info/top_level.txt

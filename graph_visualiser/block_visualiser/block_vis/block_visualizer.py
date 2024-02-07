@@ -4,7 +4,6 @@ import os
 from graph_visualiser.api.model.graph import Graph
 from graph_visualiser.api.visualizer import Visualizer
 
-
 class BlockVisualiser(Visualizer):
     def identifier(self):
         return "BlockVisualiser"
@@ -18,8 +17,7 @@ class BlockVisualiser(Visualizer):
     def generate_html(self):
         context = {"graph": self.graph}
 
-        env = Environment(loader=FileSystemLoader("C:/Users/Milos/PythonProjects/SOK-Team-13/D3Core/d3_primeri/templates"))
-        print("VEPAR GEDZAAAAAAAAAAAAAAAAAAAAAa")
+        env = Environment(loader=FileSystemLoader("../graph_visualiser/block_visualiser/block_vis"))
 
         for i in env.list_templates():
             print(i)

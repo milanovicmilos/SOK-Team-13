@@ -1,7 +1,6 @@
 from django.apps.registry import apps
 from django.shortcuts import render, redirect
 
-from d3_primeri.models import Prodavnica, Artikal
 
 
 def index(request):
@@ -28,10 +27,6 @@ def ucitavanje_plugin(request, id):
     return redirect('index')
 
 
-def primerPanZoom(request):
-    plugini = apps.get_app_config('d3_primeri').plugini_ucitavanje
-    return render(request, "primerPanZoom.html", {"title": "Primer Pan Zoom", "plugini_ucitavanje": plugini})
-
 
 def ucitavanje_plugin_visualizer(request, id):
     request.session['izabran_plugin_visualizer_ucitavanje'] = id
@@ -44,6 +39,10 @@ def ucitavanje_plugin_visualizer(request, id):
         if i.identifier() == id:
             print("vepar")
             i.set_graph(apps.get_app_config('d3_primeri').graph)
-            i.generate_html()
             print("wdwdwwd")
+            return render(request, 'index.html', {'block_visualizer_view': i.generate_html(),
+                                                  "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+                                                  "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+                                                  })
+
     return redirect('index')
