@@ -1,0 +1,10 @@
+setup.py
+data_source_plugin_json.egg-info/PKG-INFO
+data_source_plugin_json.egg-info/SOURCES.txt
+data_source_plugin_json.egg-info/dependency_links.txt
+data_source_plugin_json.egg-info/entry_points.txt
+data_source_plugin_json.egg-info/namespace_packages.txt
+data_source_plugin_json.egg-info/requires.txt
+data_source_plugin_json.egg-info/top_level.txt
+plugin_implementation/__init__.py
+plugin_implementation/data_source_plugin_json_implementation.py
