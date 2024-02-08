@@ -1,2 +1,3 @@
 [graph_visualiser.data_source]
 json = plugin_implementation.data_source_plugin_html_implementation:DataSourceHTML
+

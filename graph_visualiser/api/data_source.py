@@ -77,3 +77,11 @@ class DataSource(ABC):
     @abstractmethod
     def naziv(self):
         pass
+
+    @abstractmethod
+    def set_url(self, url:str):
+        pass
+
+    @abstractmethod
+    def reset_graph(self):
+        pass

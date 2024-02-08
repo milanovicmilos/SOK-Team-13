@@ -14,6 +14,12 @@
       <div>
           <a href="{% url 'index' %}">Graph Visualiser</a>
       </div>
+        <div>
+            <form method="get" action="{% url 'your_view_function' %}">
+                <input type="text" name="url_pretraga" placeholder="url">
+                <input type="submit" value="unesi">
+            </form>
+        </div>
       <div>
           {% if plugini_ucitavanje %}
              {% for p in plugini_ucitavanje %}
@@ -26,9 +32,15 @@
           {% endif %}
       </div>
         <div>
-            <form>
+            <form method="get" action="{% url 'search_function' %}">
                 <input type="text" name="pretraga" placeholder="Pretraga">
                 <input type="submit" value="Pretrazi">
+            </form>
+        </div>
+         <div>
+            <form method="get" action="{% url 'filter_function' %}">
+                <input type="text" name="filter" placeholder="Filter">
+                <input type="submit" value="Filter">
             </form>
         </div>
       <div>
