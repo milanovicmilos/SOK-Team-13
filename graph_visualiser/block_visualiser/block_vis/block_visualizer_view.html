@@ -206,12 +206,11 @@
                 .attr('y2', function (d) {
                     return d.target.y;
                 });
-
-            update_viewport_calc();
+        update_viewport_calc();
         }
 
         function update_viewport_calc() {
-        // Get the current scale of the SVG
+            // Get the current scale of the SVG
             let scale = d3.transform(svg.attr("transform")).scale[0];
 
             // Get the dimensions of the SVG viewport
@@ -230,7 +229,7 @@
 
             // Iterate through all nodes to identify those within the viewport
             let visibleNodes = [];
-            node.each(function(d) {
+            node.each(function (d) {
                 let nodeX = d.x;
                 let nodeY = d.y;
 
