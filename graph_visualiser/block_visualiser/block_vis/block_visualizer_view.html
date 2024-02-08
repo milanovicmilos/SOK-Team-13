@@ -23,13 +23,13 @@
 {% endblock %}
 {% block content %}
 <div>
-    <svg width="600" height="600">
+    <svg width="100%" height="669px">
 
     </svg>
 </div>
 <script>
     // Cvorovi grafa predstavljalu prodavnice i artikli.
-    var nodes = {
+    let nodes = {
         {% for  node in graph.nodes %}
             "{{ node.node_id }}": {{ node.parsed_data }},
         {% endfor %}
@@ -55,7 +55,7 @@
     }
 
 
-    var links=[
+    let links=[
         {% for edge in graph.edges %}
             {
               source: "{{ edge.source_node.node_id }}",
@@ -69,7 +69,7 @@
     });
     // Force layout vrsi numericku simulaciju n-tela (n-cestica).
     // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/
-    var force = d3.layout.force() // kreiranje force layout-a
+    let force = d3.layout.force() // kreiranje force layout-a
         .size([600, 600]) // raspoloziv prostor za iscrtavanje
         .nodes(d3.values(nodes)) // dodavanje informacija o cvorovima grafa
         .links(links) // dodavanje informacije o ivicama grafa
@@ -78,23 +78,22 @@
         .charge(-100) // koliko da se elementi odbijaju (pozitivna vrednost kaze koliko se elementi privlace)
         .start(); //pokreni simulaciju
 
-    var svg = d3.select('svg')
-    .attr('width', '450')  // Set the width to 100% of the parent container
-    .attr('height', '450') // Set the height to 100% of the parent container
+    let svg = d3.select('svg')
     .style('border', '1px solid black') // Add border style
     .call(d3.behavior.zoom().on("zoom", function () {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "wheel") {
             svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+            update_viewport_calc();
         }}))
     .append('g'); // Append a group element for content
 
 // Define the viewBox and preserveAspectRatio attributes for a fixed-size view
-svg.attr('viewBox', '0 0 600 600')
-   .attr('preserveAspectRatio', 'xMidYMid meet');
+    svg.attr('viewBox', '0 0 600 600')
+       .attr('preserveAspectRatio', 'xMidYMid meet');
 
 
-    // Stvarno iscrtavanje linkova koji su prikazani linijama.
-    var link = svg.selectAll('.link')
+    // Stletno iscrtavanje linkova koji su prikazani linijama.
+    let link = svg.selectAll('.link')
         .data(links)
         .enter().append('line')
         .attr('class', 'link')
@@ -103,8 +102,8 @@ svg.attr('viewBox', '0 0 600 600')
         .attr('x2', function(d) { return d.target.y; })
         .attr('y2', function(d) { return d.target.x; });
 
-    // Stvarno iscrtavanje cvorova reprezentovanih g tagom.
-    var node = svg.selectAll('.node')
+    // Stletno iscrtavanje cvorova reprezentovanih g tagom.
+    let node = svg.selectAll('.node')
         .data(force.nodes()) //add
         .enter().append('g')
         .attr('class', 'node')
@@ -119,11 +118,11 @@ svg.attr('viewBox', '0 0 600 600')
 
     function complicatedView(d) {
         // Funkcija zaduzena za iscrtavanje cvora grafa
-        var length = 150;
-        var numOfRows = Object.keys(d).length - 6;
+        let length = 150;
+        let numOfRows = Object.keys(d).length - 6;
 
-        var textSize = 10;
-        var height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
+        let textSize = 10;
+        let height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
         height += textSize;
 
         // Iscrtavanje kvadrata.
@@ -156,9 +155,9 @@ svg.attr('viewBox', '0 0 600 600')
             .attr('stroke', 'gray')
             .attr('stroke-width', 2);
 
-        var iterationIndex = 0;
+        let iterationIndex = 0;
         // Iteriranje po kategorijama.Ubacivanje teksta za kategorije
-        for (var key in d) {
+        for (let key in d) {
             if(key === "id"){
                 d3.select("g#" + urlToValidId(d.id))
                 .append('text')
@@ -208,8 +207,40 @@ svg.attr('viewBox', '0 0 600 600')
                     return d.target.y;
                 });
 
+            update_viewport_calc();
         }
 
+        function update_viewport_calc() {
+        // Get the current scale of the SVG
+            let scale = d3.transform(svg.attr("transform")).scale[0];
+
+            // Get the dimensions of the SVG viewport
+            let svgWidth = 940 / scale;
+            let svgHeight = 669 / scale;
+
+            // Get the current translation of the SVG
+            let translateX = d3.transform(svg.attr("transform")).translate[0];
+            let translateY = d3.transform(svg.attr("transform")).translate[1];
+
+            // Calculate the boundaries of the SVG viewport
+            let minX = -translateX / scale;
+            let minY = -translateY / scale;
+            let maxX = minX + svgWidth;
+            let maxY = minY + svgHeight;
+
+            // Iterate through all nodes to identify those within the viewport
+            let visibleNodes = [];
+            node.each(function(d) {
+                let nodeX = d.x;
+                let nodeY = d.y;
+
+                // Check if the node's coordinates are within the boundaries of the viewport
+                if (nodeX >= minX && nodeX <= maxX && nodeY >= minY && nodeY <= maxY) {
+                    visibleNodes.push(d);
+                }
+            });
+            update_viewport(visibleNodes);
+        }
 
 </script>
 {% endblock %}
