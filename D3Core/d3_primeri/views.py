@@ -121,6 +121,134 @@ def search(request):
     })
 
 
+def filter_func(request):
+    if request.method == "GET":
+        filter_input = request.GET.get('filter', None)
+        if filter_input:
+            tag, komparator, filter_value = filter_input.split(' ')
+            print(tag)
+            print(komparator)
+            print(filter_value)
+            if not filter_value.isdigit():
+                return render(request, 'index.html', {
+                    "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+                    "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+                })
+            filter_value = int(filter_value)
+            graph = apps.get_app_config('d3_primeri').graph
+            if graph is not None:
+                nodes = copy.copy(graph.nodes)
+                invalid_nodes = []
+                match komparator:
+                    case "==":
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag)
+                            if not count == filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+                    case ">":
+                        print("ccccIIIIIIIIIKKKKAAAA")
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag) 
+                            if not count > filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+                    case "<":
+                        print("PRIIIIIIIIIKKKKAAAA")
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag)
+                            if not count < filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+                    case ">=":
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag)
+                            if not count >= filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+                    case "<=":
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag)
+                            if not count <= filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+                    case "!=":
+                        for node in nodes:
+                            data = node.data
+                            count = data.count(tag)
+                            if count == filter_value:
+                                graph.nodes.remove(node)
+                                invalid_nodes.append(node)
+                        edges = copy.copy(graph.edges)
+                        for invalid_node in invalid_nodes:
+                            for edge in edges:
+                                if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                                    if edge in graph.edges:
+                                        graph.edges.remove(edge)
+                        apps.get_app_config('d3_primeri').graph = graph
+
+                    case _:
+                        return render(request, 'index.html', {
+                            "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+                            "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+                        })
+            return render(request, 'index.html', {
+                "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+                "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
