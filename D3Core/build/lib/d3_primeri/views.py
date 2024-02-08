@@ -36,11 +36,9 @@ def ucitavanje_plugin_visualizer(request, id):
     plugini = apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
     print(plugini)
     for i in plugini:
-        print("BRMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         print(i.identifier())
         print(id)
         if i.identifier() == id:
-            print("vepar")
             i.set_graph(apps.get_app_config('d3_primeri').graph)
             print("wdwdwwd")
             print("krmadijaaaaaaaaa2222222222222222222222")
@@ -51,24 +49,23 @@ def ucitavanje_plugin_visualizer(request, id):
             script_directory = os.path.dirname(current_script_path)
             folder_path = os.path.join(script_directory, './templates')
             print("Folder Path:", folder_path)
-
             env = Environment(loader=FileSystemLoader(folder_path))
-            print(env.list_templates())
+            bird_template = env.get_template("bird_view.html")
+            tree_template = env.get_template("tree_view.html")
 
-            for j in env.list_templates():
-                print(j)
-            template = env.get_template("bird_view.html")
-
-            return render(request, 'index.html', {'block_visualizer_view': i.generate_html(),
-                                                  'bird_view': template.render(context),
-                                                  "plugini_ucitavanje": apps.get_app_config(
-                                                      'd3_primeri').plugini_ucitavanje,
-                                                  "plugini_visualizer_ucitavanje": apps.get_app_config(
-                                                      'd3_primeri').plugini_visualizer_ucitavanje,
-                                                  })
-
+            return render(request, 'index.html', {
+                'bird_view': bird_template.render(context),
+                'tree_view': tree_template.render(context),
+                'block_visualizer_view': i.generate_html(),
+                "plugini_ucitavanje": apps.get_app_config(
+                    'd3_primeri').plugini_ucitavanje,
+                "plugini_visualizer_ucitavanje": apps.get_app_config(
+                    'd3_primeri').plugini_visualizer_ucitavanje,
+                "bird_view_rendered": True,
+            })
 
     return redirect('index')
+
 
 
 def your_view_function(request):

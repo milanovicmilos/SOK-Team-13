@@ -1,10 +1,6 @@
 Metadata-Version: 2.1
-Name: block-visualiser
+Name: block_visualiser
 Version: 0.1
-Summary: UNKNOWN
-Home-page: UNKNOWN
-License: UNKNOWN
-Platform: UNKNOWN
-
-UNKNOWN
-
+Requires-Dist: beautifulsoup4==4.9.3
+Requires-Dist: requests==2.25.1
+Requires-Dist: jinja2==3.1.3

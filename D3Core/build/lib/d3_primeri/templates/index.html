@@ -56,12 +56,9 @@
       </div>
   </div>
   <div class="left">
-      <ul>
-          <li>
-              <a href="{% url 'index' %}">Home</a>
-          </li>
-      </ul>
-      {% block links %}{% endblock %}
+      {% block tree_view_content %}
+          {{ tree_view|safe }}
+      {% endblock %}
   </div>
   <div class="center">
       {% block content %}
