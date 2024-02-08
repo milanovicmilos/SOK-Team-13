@@ -1,12 +1,18 @@
 svg{
   border:1px black solid;
   }
-
 .left {
-  /*float: left;*/
-  /*width: 20%;*/
-  text-align: center;
+    /* Add a fixed height for the left div (adjust as needed) */
+    height: 100%; /* or a specific height in pixels or percentage */
 
+    /* Add overflow property to enable scrolling if content overflows */
+    overflow: auto; /* or overflow-x/overflow-y for specific directions */
+}
+
+/* Optionally, you can set a max-height or max-width for the left div */
+.left {
+    max-height: 100%; /* or a specific max height in pixels or percentage */
+    /* other styles... */
 }
 
 .right {

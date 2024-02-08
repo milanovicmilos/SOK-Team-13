@@ -18,3 +18,4 @@ d3_primeri/static/d3.v3.js
 d3_primeri/static/style.css
 d3_primeri/templates/bird_view.html
 d3_primeri/templates/index.html
+d3_primeri/templates/tree_view.html
