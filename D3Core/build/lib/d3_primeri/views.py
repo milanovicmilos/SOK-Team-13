@@ -25,6 +25,7 @@ def ucitavanje_plugin(request, id):
         if i.identifier() == id:
             print("vepar")
             i.set_url(apps.get_app_config('d3_primeri').url)
+            i.reset_graph()
             apps.get_app_config('d3_primeri').graph = i.get_graph()
             print("wdwdwwd")
     return redirect('index')
@@ -64,6 +65,7 @@ def ucitavanje_plugin_visualizer(request, id):
                                                       'd3_primeri').plugini_visualizer_ucitavanje,
                                                   })
 
+
     return redirect('index')
 
 
@@ -85,3 +87,4 @@ def your_view_function(request):
                                                   "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
                                                   "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
                                                   })
+

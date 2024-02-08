@@ -25,6 +25,7 @@ def ucitavanje_plugin(request, id):
         if i.identifier() == id:
             print("vepar")
             i.set_url(apps.get_app_config('d3_primeri').url)
+            i.reset_graph()
             apps.get_app_config('d3_primeri').graph = i.get_graph()
             print("wdwdwwd")
     return redirect('index')

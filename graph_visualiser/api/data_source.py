@@ -81,3 +81,7 @@ class DataSource(ABC):
     @abstractmethod
     def set_url(self, url:str):
         pass
+
+    @abstractmethod
+    def reset_graph(self):
+        pass

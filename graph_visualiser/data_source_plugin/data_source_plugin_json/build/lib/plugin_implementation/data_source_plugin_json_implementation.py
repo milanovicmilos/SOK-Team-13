@@ -27,16 +27,17 @@ class DataSourceJSON(DataSource):
         return node
 
     def get_next_node(self, links, current_node, depth: int = 0) -> None:
-        if self.graph.get_graph_size() > 60:
+        if self.graph.get_graph_size() > 5:
             return
         if depth > 3:
             return
         for link in links:
             self.data_getter.set_url(link)
             json_data = self.data_getter.get_node_json_data()
-            node = self.create_node(json_data["data"], link)
-            self.create_edge(node, current_node)
-            self.get_next_node(json_data["links"], node, depth + 1)
+            if json_data is not None:
+                node = self.create_node(json_data["data"], link)
+                self.create_edge(node, current_node)
+                self.get_next_node(json_data["links"], node, depth + 1)
         return
 
     def create_edge(self, node: Node, current_node: Node) -> None:
@@ -49,7 +50,8 @@ class DataSourceJSON(DataSource):
     def naziv(self):
         return "JSON"
 
-
     def set_url(self, url: str):
         self.url = url
 
+    def reset_graph(self):
+        self.graph = Graph()
