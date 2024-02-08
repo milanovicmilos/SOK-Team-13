@@ -77,5 +77,7 @@ class DataSourceHTML(DataSource):
     def naziv(self):
         return "HTML"
 
+
     def set_url(self, url: str):
         self.url = url
+

@@ -49,5 +49,7 @@ class DataSourceJSON(DataSource):
     def naziv(self):
         return "JSON"
 
+
     def set_url(self, url: str):
         self.url = url
+

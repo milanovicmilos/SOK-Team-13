@@ -65,10 +65,14 @@
       {% endblock %}
   </div>
   <div class="right">
-
+    {% block bird_view_content %}
+      <div>
+         {{ bird_view|safe }}
+      </div>
+      {% endblock %}
   </div>
-  <div class="vertical-line left-line"></div> <!-- Vertical line at 20% from the left -->
-  <div class="vertical-line right-line"></div> <!-- Vertical line at 70% from the left -->
+{#  <div class="vertical-line left-line"></div>#}
+{#  <div class="vertical-line right-line"></div>#}
   <div class="footer">Graph visualiser of wikipedia pages</div>
 </div>
 </body>

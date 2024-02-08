@@ -25,7 +25,6 @@ def load_visualizer_plugins(oznaka):
 
 
 def load_plugins(oznaka):
-
     plugins = []
 
     list_of_entry_points = list(pkg_resources.iter_entry_points(group=oznaka))
