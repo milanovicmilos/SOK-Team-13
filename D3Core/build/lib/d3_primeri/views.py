@@ -2,7 +2,7 @@ from django.apps.registry import apps
 from django.shortcuts import render, redirect
 import os
 from jinja2 import Environment, FileSystemLoader
-
+import copy
 
 def index(request):
     print("KRMADIJA")
@@ -43,7 +43,9 @@ def ucitavanje_plugin_visualizer(request, id):
             print("vepar")
             i.set_graph(apps.get_app_config('d3_primeri').graph)
             print("wdwdwwd")
-
+            print("krmadijaaaaaaaaa2222222222222222222222")
+            for node in apps.get_app_config('d3_primeri').graph.nodes:
+                print(node.node_id)
             context = {"graph": apps.get_app_config('d3_primeri').graph}
             current_script_path = os.path.realpath(__file__)
             script_directory = os.path.dirname(current_script_path)
@@ -87,4 +89,43 @@ def your_view_function(request):
                                                   "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
                                                   "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
                                                   })
+
+def search(request):
+    if request.method == 'GET':
+        pretraga = request.GET.get('pretraga', None)
+        if pretraga:
+            graph = apps.get_app_config('d3_primeri').graph
+            if graph is not None:
+                invalid_nodes = []
+                nodes = copy.copy(graph.nodes)
+                print(len(nodes))
+                for node in nodes:
+                    print(pretraga.lower())
+                    print(node.node_id.lower())
+                    if not pretraga.lower() in node.node_id.lower():
+                        print("proso")
+                        invalid_nodes.append(node)
+                        graph.nodes.remove(node)
+                edges = copy.copy(graph.edges)
+                for invalid_node in invalid_nodes:
+                    for edge in edges:
+                        if invalid_node.node_id == edge.source_node.node_id or invalid_node.node_id == edge.target_node.node_id:
+                            if edge in graph.edges:
+                                graph.edges.remove(edge)
+                apps.get_app_config('d3_primeri').graph = graph
+                print("krmadijaaaaaaaaa")
+                for node in apps.get_app_config('d3_primeri').graph.nodes:
+                    print(node.node_id)
+                print(len(apps.get_app_config('d3_primeri').graph.nodes))
+    return render(request, 'index.html', {
+        "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+        "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+    })
+
+
+
+
+
+
+
 

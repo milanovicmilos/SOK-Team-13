@@ -32,9 +32,15 @@
           {% endif %}
       </div>
         <div>
-            <form>
+            <form method="get" action="{% url 'search_function' %}">
                 <input type="text" name="pretraga" placeholder="Pretraga">
                 <input type="submit" value="Pretrazi">
+            </form>
+        </div>
+         <div>
+            <form>
+                <input type="text" name="filter" placeholder="Filter">
+                <input type="submit" value="Filter">
             </form>
         </div>
       <div>
