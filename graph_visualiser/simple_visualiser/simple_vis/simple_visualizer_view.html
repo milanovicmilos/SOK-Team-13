@@ -123,20 +123,8 @@ function nodeClick(el) {
 
         // Funkcija zaduzena za iscrtavanje cvora grafa
         let length = 150;
-        let numOfRows = Object.keys(d).length - 6;
-
         let textSize = 10;
-        let height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
-        height += textSize;
 
-        {#// Iscrtavanje kruga.#}
-        {#d3.select("g#" + urlToValidId(d.id))#}
-        {#    .append('circle')#}
-        {#    .attr('x', 0)#}
-        {#    .attr('y', 0)#}
-        {#    .attr('width', length / 2)#}
-        {#    .attr('fill', 'yellow');#}
-                // Iscrtavanje kruga.
         d3.select("g#" + urlToValidId(d.id))
             .append('circle')
             .attr('r', 10) //radius of circle
@@ -242,7 +230,7 @@ function nodeClick(el) {
             console.log("krme")
             selectedNode.selectAll('circle')
                 .attr('fill', newColor);
-            block_bird(modifiedNodeId)
+            block_bird2(modifiedNodeId)
         }
     }
 

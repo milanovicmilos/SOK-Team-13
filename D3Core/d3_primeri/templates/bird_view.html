@@ -214,5 +214,19 @@
     }
     }
 
+    function block_bird2(node_id){
+        console.log("vepar")
+        const selectedNode = d3.select('g#' + urlToValidId(node_id));
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('circle').attr('fill');
+            let newColor = currentColor === 'red' ? 'orange' : 'red';
+            console.log("krme")
+            selectedNode.selectAll('circle')
+                .attr('fill', newColor);
+    }
+    }
+
 </script>
 {% endblock %}
