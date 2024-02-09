@@ -158,7 +158,7 @@ def filter_func(request):
                         print("ccccIIIIIIIIIKKKKAAAA")
                         for node in nodes:
                             data = node.data
-                            count = data.count(tag) 
+                            count = data.count(tag)
                             if not count > filter_value:
                                 graph.nodes.remove(node)
                                 invalid_nodes.append(node)

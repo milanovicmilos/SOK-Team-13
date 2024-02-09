@@ -10,6 +10,14 @@ ul, #myUL {
   margin: 0;
   padding: 0;
 }
+.active-li {
+        color: red;
+    }
+
+.not-active-li{
+    color:orange;
+}
+
 
 /* Style the caret/arrow */
 /* Style the caret/arrow */
@@ -88,6 +96,13 @@ const nodes_in_tree = new Set();
 function writeChildren(children,ul){
     for(const child of children){
         const li = document.createElement("li");
+        li.setAttribute("id", child)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+        });
         ul.appendChild(li);
         getChildren(child,li);
     }
@@ -137,6 +152,13 @@ function createTree() {
         }
         visited_nodes.add(node);
         const li = document.createElement("li");
+        li.setAttribute("id", node)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+        });
         const span = document.createElement("span");
         span.textContent = urlToValidName(node);
         span.className = "caret";
