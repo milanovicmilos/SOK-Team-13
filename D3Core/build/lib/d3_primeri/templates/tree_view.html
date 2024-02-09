@@ -102,6 +102,7 @@ function writeChildren(children,ul){
             event.stopPropagation();
             this.classList.toggle("not-active-li")
             this.classList.toggle("active-li");
+            tree_block(this.id)
         });
         ul.appendChild(li);
         getChildren(child,li);
@@ -158,6 +159,7 @@ function createTree() {
             event.stopPropagation();
             this.classList.toggle("not-active-li")
             this.classList.toggle("active-li");
+            tree_block(this.id)
         });
         const span = document.createElement("span");
         span.textContent = urlToValidName(node);
@@ -194,6 +196,21 @@ for (i = 0; i < toggler.length; i++) {
 
     this.classList.toggle("caret-down");
   });
+}
+
+function block_tree(node_id){
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        const modifiedNodeId = new_node.slice(0, -1);
+        if (modifiedNodeId === node_id){
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+}
 }
 
 </script>

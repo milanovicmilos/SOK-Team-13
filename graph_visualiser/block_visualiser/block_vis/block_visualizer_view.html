@@ -248,10 +248,29 @@
 
 
         function bird_block(node_id){
-        console.log(node_id)
-        const modifiedNodeId = node_id.slice(0, -1);
+            console.log(node_id)
+            const modifiedNodeId = node_id.slice(0, -1);
+            console.log(modifiedNodeId)
+        // Select the specific node by modified ID
+            const selectedNode = d3.select('g#' + modifiedNodeId);
+
+            if (!selectedNode.empty()) {
+                console.log("prase")
+                let currentColor = selectedNode.select('rect').attr('fill');
+                let newColor = currentColor === 'red' ? 'yellow' : 'red';
+                console.log("krme")
+                selectedNode.selectAll('rect')
+                    .attr('fill', newColor);
+                block_tree(modifiedNodeId)
+    }
+    }
+
+    function tree_block(node_id){
+        console.log(urlToValidId(node_id))
+        let new_node = urlToValidId(node_id)
+        console.log(urlToValidId(new_node))
+        const modifiedNodeId = new_node.slice(0, -1);
         console.log(modifiedNodeId)
-    // Select the specific node by modified ID
         const selectedNode = d3.select('g#' + modifiedNodeId);
 
         if (!selectedNode.empty()) {
@@ -261,6 +280,7 @@
             console.log("krme")
             selectedNode.selectAll('rect')
                 .attr('fill', newColor);
+            block_bird(modifiedNodeId)
     }
     }
 
