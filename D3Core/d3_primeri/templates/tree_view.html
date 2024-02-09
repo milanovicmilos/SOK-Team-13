@@ -10,6 +10,14 @@ ul, #myUL {
   margin: 0;
   padding: 0;
 }
+.active-li {
+        color: red;
+    }
+
+.not-active-li{
+    color:orange;
+}
+
 
 /* Style the caret/arrow */
 /* Style the caret/arrow */
@@ -88,6 +96,14 @@ const nodes_in_tree = new Set();
 function writeChildren(children,ul){
     for(const child of children){
         const li = document.createElement("li");
+        li.setAttribute("id", child)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+            tree_block(this.id)
+        });
         ul.appendChild(li);
         getChildren(child,li);
     }
@@ -137,6 +153,14 @@ function createTree() {
         }
         visited_nodes.add(node);
         const li = document.createElement("li");
+        li.setAttribute("id", node)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+            tree_block(this.id)
+        });
         const span = document.createElement("span");
         span.textContent = urlToValidName(node);
         span.className = "caret";
@@ -174,5 +198,34 @@ for (i = 0; i < toggler.length; i++) {
   });
 }
 
+function block_tree(node_id){
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        const modifiedNodeId = new_node.slice(0, -1);
+        if (modifiedNodeId === node_id){
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+}
+}
+
+function bird_tree(node_id) {
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        console.log(new_node)
+        if (new_node === node_id) {
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+    }
+}
 </script>
 {% endblock %}
