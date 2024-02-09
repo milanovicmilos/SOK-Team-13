@@ -14,9 +14,15 @@
 
 </style>
 <script>
-    function nodeClick(el){
-       //alert("ID: "+el.id);
-    }
+function nodeClick(el) {
+    console.log(el.id, " :block")
+    let currentColor = d3.select(el).select('circle').attr('fill');
+    let newColor = currentColor === 'red' ? 'yellow' : 'red';
+    d3.select(el)
+    .selectAll('circle')
+    .attr('fill', newColor);
+    block_bird(el.id)
+}
 </script>
 {% endblock %}
 {% block content %}
@@ -117,20 +123,8 @@
 
         // Funkcija zaduzena za iscrtavanje cvora grafa
         let length = 150;
-        let numOfRows = Object.keys(d).length - 6;
-
         let textSize = 10;
-        let height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
-        height += textSize;
 
-        {#// Iscrtavanje kruga.#}
-        {#d3.select("g#" + urlToValidId(d.id))#}
-        {#    .append('circle')#}
-        {#    .attr('x', 0)#}
-        {#    .attr('y', 0)#}
-        {#    .attr('width', length / 2)#}
-        {#    .attr('fill', 'yellow');#}
-                // Iscrtavanje kruga.
         d3.select("g#" + urlToValidId(d.id))
             .append('circle')
             .attr('r', 10) //radius of circle
@@ -201,6 +195,43 @@
             }
         });
         update_viewport(visibleNodes);
+    }
+
+    function bird_block(node_id){
+        console.log(node_id)
+        const modifiedNodeId = node_id.slice(0, -1);
+        console.log(modifiedNodeId)
+        // Select the specific node by modified ID
+        const selectedNode = d3.select('g#' + modifiedNodeId);
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('circle').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.selectAll('circle')
+                .attr('fill', newColor);
+            block_tree(modifiedNodeId)
+        }
+    }
+
+    function tree_block(node_id){
+        console.log(urlToValidId(node_id))
+        let new_node = urlToValidId(node_id)
+        console.log(urlToValidId(new_node))
+        const modifiedNodeId = new_node.slice(0, -1);
+        console.log(modifiedNodeId)
+        const selectedNode = d3.select('g#' + modifiedNodeId);
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('circle').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.selectAll('circle')
+                .attr('fill', newColor);
+            block_bird2(modifiedNodeId)
+        }
     }
 
 </script>
