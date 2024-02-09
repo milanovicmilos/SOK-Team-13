@@ -16,10 +16,10 @@
 <script>
 function nodeClick(el) {
     console.log(el.id, " :block")
-    let currentColor = d3.select(el).select('rect').attr('fill');
+    let currentColor = d3.select(el).select('circle').attr('fill');
     let newColor = currentColor === 'red' ? 'yellow' : 'red';
     d3.select(el)
-    .selectAll('rect')
+    .selectAll('circle')
     .attr('fill', newColor);
     block_bird(el.id)
 }
@@ -218,10 +218,10 @@ function nodeClick(el) {
 
         if (!selectedNode.empty()) {
             console.log("prase")
-            let currentColor = selectedNode.select('rect').attr('fill');
+            let currentColor = selectedNode.select('circle').attr('fill');
             let newColor = currentColor === 'red' ? 'yellow' : 'red';
             console.log("krme")
-            selectedNode.selectAll('rect')
+            selectedNode.selectAll('circle')
                 .attr('fill', newColor);
             block_tree(modifiedNodeId)
         }
@@ -237,10 +237,10 @@ function nodeClick(el) {
 
         if (!selectedNode.empty()) {
             console.log("prase")
-            let currentColor = selectedNode.select('rect').attr('fill');
+            let currentColor = selectedNode.select('circle').attr('fill');
             let newColor = currentColor === 'red' ? 'yellow' : 'red';
             console.log("krme")
-            selectedNode.selectAll('rect')
+            selectedNode.selectAll('circle')
                 .attr('fill', newColor);
             block_bird(modifiedNodeId)
         }
