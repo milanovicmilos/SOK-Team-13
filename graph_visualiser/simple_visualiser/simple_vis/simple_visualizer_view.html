@@ -123,13 +123,18 @@
         let height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
         height += textSize;
 
-        // Iscrtavanje kruga.
+        {#// Iscrtavanje kruga.#}
+        {#d3.select("g#" + urlToValidId(d.id))#}
+        {#    .append('circle')#}
+        {#    .attr('x', 0)#}
+        {#    .attr('y', 0)#}
+        {#    .attr('width', length / 2)#}
+        {#    .attr('fill', 'yellow');#}
+                // Iscrtavanje kruga.
         d3.select("g#" + urlToValidId(d.id))
             .append('circle')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', length / 2)
-            .attr('fill', 'yellow');
+            .attr('r', 10) //radius of circle
+            .attr('fill','yellow');
 
         // Prikaz naziva nodea
         d3.select("g#" + urlToValidId(d.id))
