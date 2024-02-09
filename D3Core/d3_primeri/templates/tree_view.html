@@ -213,5 +213,19 @@ function block_tree(node_id){
 }
 }
 
+function bird_tree(node_id) {
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        console.log(new_node)
+        if (new_node === node_id) {
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+    }
+}
 </script>
 {% endblock %}
