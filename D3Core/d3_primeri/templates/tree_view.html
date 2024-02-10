@@ -1,0 +1,231 @@
+{% block head_sadrzaj %}
+<style>
+    /* Remove default bullets */
+ul, #myUL {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+.active-li {
+        color: red;
+    }
+
+.not-active-li{
+    color:orange;
+}
+
+
+/* Style the caret/arrow */
+/* Style the caret/arrow */
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+  display: inline-block; /* Make the caret an inline-block element */
+  vertical-align: middle; /* Align vertically with the text */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+  transition: transform 0.3s ease; /* Add a transition for smooth rotation */
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+
+
+/* Hide the nested list */
+.nested {
+  display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
+</style>
+{% endblock %}
+{% block tree_view_content %}
+<div id="treeUL">
+
+</div>
+<script>
+    function urlToValidName(url) {
+       const regex = /[^/]*(?:\/([^\/#]+))?(?:#([^#]+))?$/;
+        const match = url.match(regex);
+
+        if (match) {
+            const [ , lastSegment, fragment ] = match;
+            return fragment ? fragment : lastSegment;
+        }
+
+        // If there's no match, return the original URL
+        return url;
+    }
+
+    let nodes_tree = [
+        {% for  node in graph.nodes %}
+            "{{ node.node_id }}",
+        {% endfor %}
+    ];
+
+    let links_tree=[
+        {% for edge in graph.edges %}
+            {
+              source: "{{ edge.source_node.node_id }}",
+              target: "{{ edge.target_node.node_id }}"},
+        {% endfor %}
+    ];
+
+// Build the tree structure
+const visited_nodes = new Set();
+const nodes_in_tree = new Set();
+
+//gets array of children to write it
+function writeChildren(children,ul){
+    for(const child of children){
+        const li = document.createElement("li");
+        li.setAttribute("id", child)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+            tree_block(this.id)
+        });
+        ul.appendChild(li);
+        getChildren(child,li);
+    }
+
+}
+
+function getChildren(child, parentElement){
+    visited_nodes.add(child);
+    var children = [];
+    for(const link of links_tree){
+        if(link.source === child){
+            if(!nodes_in_tree.has(link.target)){
+                nodes_in_tree.add(link.target);
+                children.push(link.target);
+            }
+        }
+    }
+    if (children.length > 0) {
+        const span = document.createElement("span");
+        span.textContent = urlToValidName(child);
+        span.className = "caret";
+        parentElement.appendChild(span);
+        const ul = document.createElement("ul");
+        parentElement.appendChild(ul);
+        ul.className = "nested";
+        writeChildren(children,ul);
+    }else{
+        parentElement.textContent = urlToValidName(child);
+    }
+}
+
+function createTree() {
+    const ul = document.createElement("ul");
+    ul.setAttribute("id", "myUL");
+
+
+    for (const node of nodes_tree) {
+        if(visited_nodes.has(node)){
+            continue;
+        }
+        var children = [];
+        for(const link of links_tree){
+            if(link.source === node){
+                children.push(link.target);
+                nodes_in_tree.add(link.target);
+            }
+        }
+        visited_nodes.add(node);
+        const li = document.createElement("li");
+        li.setAttribute("id", node)
+        li.classList.toggle("not-active-li")
+        li.addEventListener('click', function () {
+            event.stopPropagation();
+            this.classList.toggle("not-active-li")
+            this.classList.toggle("active-li");
+            tree_block(this.id)
+        });
+        const span = document.createElement("span");
+        span.textContent = urlToValidName(node);
+        span.className = "caret";
+        li.appendChild(span);
+        ul.appendChild(li);
+        const newUL = document.createElement("ul");
+        newUL.className = "nested";
+        li.appendChild(newUL);
+        if (children.length > 0) {
+            writeChildren(children,newUL);
+        }
+    }
+    return ul.children.length ? ul : null;
+}
+
+// Find the root nodes (nodes without a source in links_tree)
+
+const tree = createTree();
+document.getElementById("treeUL").appendChild(tree);
+
+
+var toggler = document.getElementsByClassName("caret");
+var i;
+
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    const nestedElement = this.parentElement.querySelector(".nested");
+
+    // Check if nestedElement is not null before toggling classes
+    if (nestedElement) {
+      nestedElement.classList.toggle("active");x
+    }
+
+    this.classList.toggle("caret-down");
+  });
+}
+
+function block_tree(node_id){
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        const modifiedNodeId = new_node.slice(0, -1);
+        if (modifiedNodeId === node_id){
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+}
+}
+
+function bird_tree(node_id) {
+    var allLiElements = document.querySelectorAll('li');
+    console.log(node_id)
+    for (var i = 0; i < allLiElements.length; i++) {
+        let new_node = urlToValidId(allLiElements[i].id)
+        console.log(new_node)
+        if (new_node === node_id) {
+            console.log("praseee")
+            event.stopPropagation();
+            allLiElements[i].classList.toggle("not-active-li")
+            allLiElements[i].classList.toggle("active-li");
+        }
+    }
+}
+</script>
+{% endblock %}

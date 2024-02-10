@@ -1,0 +1,239 @@
+{% block head_sadrzaj %}
+<style>
+
+.node {
+  cursor: pointer;
+  color: #046ebd;
+}
+
+.link {
+  fill: none;
+  stroke: #046ebd;
+  stroke-width: 1.5px;
+}
+
+</style>
+<script>
+function nodeClick(el) {
+    console.log(el.id, " :block")
+    let currentColor = d3.select(el).select('circle').attr('fill');
+    let newColor = currentColor === 'red' ? 'yellow' : 'red';
+    d3.select(el)
+    .selectAll('circle')
+    .attr('fill', newColor);
+    block_bird(el.id)
+}
+</script>
+{% endblock %}
+{% block content %}
+<div>
+    <svg width="600" height="600">
+
+    </svg>
+</div>
+<script>
+    // Cvorovi grafa predstavljalu prodavnice i artikli.
+    let nodes = {
+        {% for  node in graph.nodes %}
+            "{{ node.node_id }}": {{ node.parsed_data }},
+        {% endfor %}
+    };
+
+
+
+    function urlToValidId(url) {
+        // Replace invalid characters with underscores
+        return url.replace(/[^a-zA-Z0-9-_]/g, '_');
+    }
+
+    function urlToValidName(url) {
+       const regex = /[^/]*(?:\/([^\/#]+))?(?:#([^#]+))?$/;
+        const match = url.match(regex);
+
+        if (match) {
+            const [ , lastSegment, fragment ] = match;
+            return fragment ? fragment : lastSegment;
+        }
+
+        // If there's no match, return the original URL
+        return url;
+    }
+
+    let links=[
+        {% for edge in graph.edges %}
+            {
+              source: "{{ edge.source_node.node_id }}",
+              target: "{{ edge.target_node.node_id }}"},
+        {% endfor %}
+    ];
+
+    links.forEach(function(link) {
+        link.source = nodes[link.source];
+        link.target = nodes[link.target];
+    });
+    // Force layout vrsi numericku simulaciju n-tela (n-cestica).
+    // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/
+    let force = d3.layout.force() // kreiranje force layout-a
+        .size([600, 600]) // raspoloziv prostor za iscrtavanje
+        .nodes(d3.values(nodes)) // dodavanje informacija o cvorovima grafa
+        .links(links) // dodavanje informacije o ivicama grafa
+        .on("tick", tick)
+        .linkDistance(300) // duzina ivice grafa
+        .charge(-100) // koliko da se elementi odbijaju (pozitivna vrednost kaze koliko se elementi privlace)
+        .start(); //pokreni simulaciju
+
+    let svg = d3.select('svg')
+        .attr('width', 600) // Set the width of the SVG
+        .attr('height', 600) // Set the height of the SVG
+        .style('border', '1px solid black') // Add border style
+        .call(d3.behavior.zoom().on("zoom", function () {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "wheel") {
+                svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+                if(secondSvg){
+                    updateBirdViewportRect(d3.event.translate[0],d3.event.translate[1], d3.event.scale);
+                }
+            }
+        }))
+        .append('g'); // Append a group element for content
+
+// Define the viewBox and preserveAspectRatio attributes for a fixed-size view
+svg.attr('viewBox', '0 0 600 600')
+   .attr('preserveAspectRatio', 'xMidYMid meet');
+
+
+// Define the viewBox and preserveAspectRatio attributes for a fixed-size view
+    svg.attr('viewBox', '0 0 600 600')
+       .attr('preserveAspectRatio', 'xMidYMid meet');
+
+
+    // Stletno iscrtavanje linkova koji su prikazani linijama.
+    let link = svg.selectAll('.link')
+        .data(links)
+        .enter().append('line')
+        .attr('class', 'link')
+        .attr('x1', function(d) { return d.source.y; })
+        .attr('y1', function(d) { return d.source.x; })
+        .attr('x2', function(d) { return d.target.y; })
+        .attr('y2', function(d) { return d.target.x; });
+
+    // Stletno iscrtavanje cvorova reprezentovanih g tagom.
+    let node = svg.selectAll('.node')
+        .data(force.nodes()) //add
+        .enter().append('g')
+        .attr('class', 'node')
+        .attr('id', function(d) { return urlToValidId(d.id); })
+        .on('click',function(){
+           nodeClick(this);
+        });
+
+    // Sadrzaj svakog g taga iscrtavamo funkcijom simpleView.
+    d3.selectAll('.node').each(function(d){simpleView(d);});
+
+    function simpleView(d) {
+        // Brise bilo kakve predjasnje informacije(prakticno refresh)
+        d3.select("g#" + urlToValidId(d.id)).selectAll("*").remove();
+
+        // Funkcija zaduzena za iscrtavanje cvora grafa
+        let length = 150;
+        let textSize = 10;
+
+        d3.select("g#" + urlToValidId(d.id))
+            .append('circle')
+            .attr('r', 10) //radius of circle
+            .attr('fill','yellow');
+
+        // Prikaz naziva nodea
+        d3.select("g#" + urlToValidId(d.id))
+            .append('text')
+            .attr('x', length / 2)
+            .attr('y', 10)
+            .attr('text-anchor', 'middle')
+            .attr('font-size', textSize)
+            .attr('font-family', 'sans-serif')
+            .attr('fill', 'black')
+            .text(urlToValidName(d.id));
+    }
+
+    function tick(e) {
+        node.attr("transform", function (d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        })
+
+        node.call(force.drag);
+
+        // Korekcija pozicija ivica (linkova)
+        link.attr('x1', function (d) {
+            return d.source.x;
+        })
+            .attr('y1', function (d) {
+                return d.source.y;
+            })
+            .attr('x2', function (d) {
+                return d.target.x;
+            })
+            .attr('y2', function (d) {
+                return d.target.y;
+            });
+
+        if (secondNode) {
+            secondNode.attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+        }
+
+        if(secondLink){
+            secondLink.attr('x1', function (d) {
+                return d.source.x;
+            })
+            .attr('y1', function (d) {
+                return d.source.y;
+            })
+            .attr('x2', function (d) {
+                return d.target.x;
+            })
+            .attr('y2', function (d) {
+                return d.target.y;
+            });
+        }
+    }
+
+
+    function bird_block(node_id){
+        console.log(node_id)
+        const modifiedNodeId = node_id.slice(0, -1);
+        console.log(modifiedNodeId)
+        // Select the specific node by modified ID
+        const selectedNode = d3.select('g#' + modifiedNodeId);
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('circle').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.selectAll('circle')
+                .attr('fill', newColor);
+            block_tree(modifiedNodeId)
+        }
+    }
+
+    function tree_block(node_id){
+        console.log(urlToValidId(node_id))
+        let new_node = urlToValidId(node_id)
+        console.log(urlToValidId(new_node))
+        const modifiedNodeId = new_node.slice(0, -1);
+        console.log(modifiedNodeId)
+        const selectedNode = d3.select('g#' + modifiedNodeId);
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('circle').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.selectAll('circle')
+                .attr('fill', newColor);
+            block_bird2(modifiedNodeId,'circle')
+        }
+    }
+
+</script>
+{% endblock %}
