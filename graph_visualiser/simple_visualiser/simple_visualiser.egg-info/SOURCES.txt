@@ -1,0 +1,9 @@
+setup.py
+simple_vis/__init__.py
+simple_vis/simple_visualizer.py
+simple_visualiser.egg-info/PKG-INFO
+simple_visualiser.egg-info/SOURCES.txt
+simple_visualiser.egg-info/dependency_links.txt
+simple_visualiser.egg-info/entry_points.txt
+simple_visualiser.egg-info/requires.txt
+simple_visualiser.egg-info/top_level.txt

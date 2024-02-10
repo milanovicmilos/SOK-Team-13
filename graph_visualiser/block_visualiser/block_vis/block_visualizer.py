@@ -15,7 +15,7 @@ class BlockVisualiser(Visualizer):
         return "BlockVisualiser"
 
     def generate_html(self):
-        context = {"graph": self.graph}
+        context = {"graph": self.graph, "graph_name": self.name}
 
         env = Environment(loader=FileSystemLoader("../graph_visualiser/block_visualiser/block_vis"))
 

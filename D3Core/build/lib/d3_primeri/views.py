@@ -4,6 +4,7 @@ import os
 from jinja2 import Environment, FileSystemLoader
 import copy
 
+
 def index(request):
     print("KRMADIJA")
     plugini = apps.get_app_config('d3_primeri').plugini_ucitavanje
@@ -40,11 +41,8 @@ def ucitavanje_plugin_visualizer(request, id):
         print(id)
         if i.identifier() == id:
             i.set_graph(apps.get_app_config('d3_primeri').graph)
-            print("wdwdwwd")
-            print("krmadijaaaaaaaaa2222222222222222222222")
-            for node in apps.get_app_config('d3_primeri').graph.nodes:
-                print(node.node_id)
-            context = {"graph": apps.get_app_config('d3_primeri').graph}
+
+            context = {"graph": apps.get_app_config('d3_primeri').graph, "graph_name": i.identifier()}
             current_script_path = os.path.realpath(__file__)
             script_directory = os.path.dirname(current_script_path)
             folder_path = os.path.join(script_directory, './templates')
@@ -52,21 +50,21 @@ def ucitavanje_plugin_visualizer(request, id):
             env = Environment(loader=FileSystemLoader(folder_path))
             bird_template = env.get_template("bird_view.html")
             tree_template = env.get_template("tree_view.html")
+            block_visualizer_html = i.generate_html()
+
+            print("CONTEXT: " + context["graph_name"])
 
             return render(request, 'index.html', {
+                'block_visualizer_view': block_visualizer_html,
                 'bird_view': bird_template.render(context),
                 'tree_view': tree_template.render(context),
-                'block_visualizer_view': i.generate_html(),
                 "plugini_ucitavanje": apps.get_app_config(
                     'd3_primeri').plugini_ucitavanje,
                 "plugini_visualizer_ucitavanje": apps.get_app_config(
                     'd3_primeri').plugini_visualizer_ucitavanje,
-                "bird_view_rendered": True,
             })
 
     return redirect('index')
-
-
 
 
 def your_view_function(request):
@@ -84,9 +82,10 @@ def your_view_function(request):
     # Your other view logic goes here
 
     return render(request, 'index.html', {
-                                                  "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
-                                                  "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
-                                                  })
+        "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
+        "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+    })
+
 
 def search(request):
     if request.method == 'GET':
@@ -230,28 +229,10 @@ def filter_func(request):
                     case _:
                         return render(request, 'index.html', {
                             "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
-                            "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
+                            "plugini_visualizer_ucitavanje": apps.get_app_config(
+                                'd3_primeri').plugini_visualizer_ucitavanje
                         })
             return render(request, 'index.html', {
                 "plugini_ucitavanje": apps.get_app_config('d3_primeri').plugini_ucitavanje,
                 "plugini_visualizer_ucitavanje": apps.get_app_config('d3_primeri').plugini_visualizer_ucitavanje
             })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
