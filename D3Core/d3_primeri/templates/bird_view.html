@@ -13,21 +13,18 @@
   stroke-width: 1.5px;
 }
 #bird_svg {
-    pointer-events: none;
+    pointer-events: auto;
 }
 </style>
     <script>
     function nodeClickBird(el) {
-         console.log(el.id, " :bird")
-        // Check the current fill color
-        let currentColor = d3.select(el).select('circle').attr('fill');
-
+        let currentColor = d3.select(el).select(shape).attr('fill');
         // Toggle between red and orange
-        let newColor = currentColor === 'red' ? 'orange' : 'red';
+        let newColor = currentColor === 'red' ? 'yellow' : 'red';
 
         // Set the new color
         d3.select(el)
-            .selectAll('circle')
+            .select(shape)
             .attr('fill', newColor);
         bird_block(el.id)
     }
@@ -35,7 +32,7 @@
 {% endblock %}
 {% block bird_view_content %}
 <div>
-    <svg id="bird_svg" width="570" height="650">
+    <svg id="bird_svg" width="600" height="600">
     </svg>
 </div>
 <script>
@@ -47,6 +44,7 @@
         // Replace invalid characters with underscores
         return url.replace(/[^a-zA-Z0-9-_]/g, '_') + '_';
     }
+
 
     function urlToValidName(url) {
        const regex = /[^/]*(?:\/([^\/#]+))?(?:#([^#]+))?$/;
@@ -62,8 +60,8 @@
     }
 
     let secondSvg = d3.select('#bird_svg')
-        .attr('width', 570) // Set the width of the SVG
-        .attr('height', 570) // Set the height of the SVG
+        .attr('width', 600) // Set the width of the SVG
+        .attr('height', 600) // Set the height of the SVG
         .append('g');
 
     secondSvg.attr('viewBox', '0 0 300 300')
@@ -74,8 +72,8 @@
     .attr('id', 'birdViewportRect')
     .attr('x', 0)      // Initial X position
     .attr('y', 0)      // Initial Y position
-    .attr('width', 570) // Initial width
-    .attr('height', 570) // Initial height
+    .attr('width', 600) // Initial width
+    .attr('height', 600) // Initial height
     .style('fill', 'none')
     .style('stroke', 'blue')
     .style('stroke-width', '2px');
@@ -85,8 +83,8 @@
         // Update the rectangle attributes based on the current transformation
        birdViewportRect.attr('x', -translateX / scale)
         .attr('y', -translateY / scale)
-        .attr('width', 570 / scale)
-        .attr('height', 570 / scale);
+        .attr('width', 600 / scale)
+        .attr('height', 600 / scale);
     }
 
     // Stletno iscrtavanje linkova koji su prikazani linijama.
@@ -103,31 +101,36 @@ let secondNode = secondSvg.selectAll('.node')
     .data(force.nodes())
     .enter().append('g')
     .attr('class', 'node')
-    .attr('id', function (d) { return urlToValidId(d.id); });
+    .attr('id', function (d) { return urlToValidId(d.id); })
+    .on('click', function () {
+        nodeClickBird(this);
+    });
 
-
+    var shape;
     if("{{ graph_name }}" === "SimpleVisualiser"){
+        shape='circle';
         secondNode.each(function (d) {
             simpleView(d);
         });
     }else{
+        shape='rect';
         secondNode.each(function (d) {
             complicatedView(d);
         });
     }
 
-     secondSvg.call(d3.behavior.zoom().on("zoom", function () {
-            console.log("Entered zoom")
-            // Disable zooming for the second SVG
-            d3.event.sourceEvent.preventDefault();
-            d3.event.sourceEvent.stopPropagation();
-
-            const scale = 0.5; // Adjust the scale factor as needed
-            const translateX = d3.event.translate[0] * scale;
-            const translateY = d3.event.translate[1] * scale;
-            secondSvg.attr("transform", "translate(" + translateX + "," + translateY + ") scale(" + scale + ")");
-            updateBirdViewportRect(translateX, translateY, scale);
-        }));
+     {#secondSvg.call(d3.behavior.zoom().on("zoom", function () {#}
+     {#       console.log("Entered zoom")#}
+     {#       // Disable zooming for the second SVG#}
+     {#       d3.event.sourceEvent.preventDefault();#}
+     {#       d3.event.sourceEvent.stopPropagation();#}
+     {##}
+     {#       const scale = 0.5; // Adjust the scale factor as needed#}
+     {#       const translateX = d3.event.translate[0] * scale;#}
+     {#       const translateY = d3.event.translate[1] * scale;#}
+     {#       secondSvg.attr("transform", "translate(" + translateX + "," + translateY + ") scale(" + scale + ")");#}
+     {#       updateBirdViewportRect(translateX, translateY, scale);#}
+     {#   }));#}
 
 
 
@@ -146,7 +149,7 @@ let secondNode = secondSvg.selectAll('.node')
     }
     }
 
-    function block_bird2(node_id){
+    function block_bird_tree(node_id){
         console.log("vepar")
         const selectedNode = d3.select('g#' + urlToValidId(node_id));
 
@@ -159,6 +162,20 @@ let secondNode = secondSvg.selectAll('.node')
                 .attr('fill', newColor);
             bird_tree(urlToValidId(node_id))
     }
+    }
+
+    function block_bird2(node_id,shape){
+        console.log("vepar")
+        const selectedNode = d3.select('g#' + urlToValidId(node_id));
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select(shape).attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.select(shape)
+                .attr('fill', newColor);
+        }
     }
 
 </script>

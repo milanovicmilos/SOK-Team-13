@@ -22,13 +22,13 @@
   d3.select(el)
     .selectAll('rect')
     .attr('fill', newColor);
-  block_bird2(el.id)
+  block_bird_tree(el.id)
 }
 </script>
 {% endblock %}
 {% block content %}
 <div>
-    <svg width="650" height="650">
+    <svg width="600" height="600">
 
     </svg>
 </div>
@@ -85,8 +85,8 @@
 
     let svg = d3.select('svg')
     .style('border', '1px solid black') // Add border style
-    .attr('width', 650) // Set the width of the SVG
-    .attr('height', 650) // Set the height of the SVG
+    .attr('width', 600) // Set the width of the SVG
+    .attr('height', 600) // Set the height of the SVG
     .call(d3.behavior.zoom().on("zoom", function () {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "wheel") {
             svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
@@ -127,10 +127,10 @@
 
     function complicatedView(d) {
         // Funkcija zaduzena za iscrtavanje cvora grafa
-        let length = 150;
+        let length = 80;
         let numOfRows = Object.keys(d).length - 6;
 
-        let textSize = 10;
+        let textSize = 6;
         let height = (numOfRows == 0) ? textSize : numOfRows * textSize + 5;
         height += textSize;
 
@@ -147,7 +147,7 @@
         d3.select("g#" + urlToValidId(d.id))
             .append('text')
             .attr('x', length / 2)
-            .attr('y', 10)
+            .attr('y', 6)
             .attr('text-anchor', 'middle')
             .attr('font-size', textSize)
             .attr('font-family', 'sans-serif')
@@ -171,7 +171,7 @@
                 d3.select("g#" + urlToValidId(d.id))
                 .append('text')
                 .attr('x', 0)
-                .attr('y', 20 + iterationIndex * textSize)
+                .attr('y', 12 + iterationIndex * textSize)
                 .attr('text-anchor', 'start')
                 .attr('font-size', textSize)
                 .attr('font-family', 'sans-serif')
@@ -271,7 +271,7 @@
             console.log("krme")
             selectedNode.selectAll('rect')
                 .attr('fill', newColor);
-            block_bird2(modifiedNodeId)
+            block_bird2(modifiedNodeId,'rect')
     }
     }
 
