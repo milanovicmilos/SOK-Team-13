@@ -27,7 +27,7 @@ function nodeClick(el) {
 {% endblock %}
 {% block content %}
 <div>
-    <svg width="650" height="650">
+    <svg width="600" height="600">
 
     </svg>
 </div>
@@ -83,8 +83,8 @@ function nodeClick(el) {
         .start(); //pokreni simulaciju
 
     let svg = d3.select('svg')
-        .attr('width', 650) // Set the width of the SVG
-        .attr('height', 650) // Set the height of the SVG
+        .attr('width', 600) // Set the width of the SVG
+        .attr('height', 600) // Set the height of the SVG
         .style('border', '1px solid black') // Add border style
         .call(d3.behavior.zoom().on("zoom", function () {
             if (d3.event.sourceEvent && d3.event.sourceEvent.type === "wheel") {

@@ -35,7 +35,7 @@
 {% endblock %}
 {% block bird_view_content %}
 <div>
-    <svg id="bird_svg" width="570" height="650">
+    <svg id="bird_svg" width="600" height="650">
     </svg>
 </div>
 <script>
@@ -62,8 +62,8 @@
     }
 
     let secondSvg = d3.select('#bird_svg')
-        .attr('width', 570) // Set the width of the SVG
-        .attr('height', 570) // Set the height of the SVG
+        .attr('width', 600) // Set the width of the SVG
+        .attr('height', 600) // Set the height of the SVG
         .append('g');
 
     secondSvg.attr('viewBox', '0 0 300 300')
@@ -74,8 +74,8 @@
     .attr('id', 'birdViewportRect')
     .attr('x', 0)      // Initial X position
     .attr('y', 0)      // Initial Y position
-    .attr('width', 570) // Initial width
-    .attr('height', 570) // Initial height
+    .attr('width', 600) // Initial width
+    .attr('height', 600) // Initial height
     .style('fill', 'none')
     .style('stroke', 'blue')
     .style('stroke-width', '2px');
@@ -85,8 +85,8 @@
         // Update the rectangle attributes based on the current transformation
        birdViewportRect.attr('x', -translateX / scale)
         .attr('y', -translateY / scale)
-        .attr('width', 570 / scale)
-        .attr('height', 570 / scale);
+        .attr('width', 600 / scale)
+        .attr('height', 600 / scale);
     }
 
     // Stletno iscrtavanje linkova koji su prikazani linijama.
@@ -146,7 +146,7 @@ let secondNode = secondSvg.selectAll('.node')
     }
     }
 
-    function block_bird2(node_id){
+    function block_bird_tree(node_id){
         console.log("vepar")
         const selectedNode = d3.select('g#' + urlToValidId(node_id));
 
@@ -159,6 +159,20 @@ let secondNode = secondSvg.selectAll('.node')
                 .attr('fill', newColor);
             bird_tree(urlToValidId(node_id))
     }
+    }
+
+    function block_bird2(node_id){
+        console.log("vepar")
+        const selectedNode = d3.select('g#' + urlToValidId(node_id));
+
+        if (!selectedNode.empty()) {
+            console.log("prase")
+            let currentColor = selectedNode.select('rect').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
+            console.log("krme")
+            selectedNode.select('rect')
+                .attr('fill', newColor);
+        }
     }
 
 </script>
