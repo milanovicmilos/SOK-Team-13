@@ -81,7 +81,7 @@ svg{
 .page {
     margin-top: 2%;
     display: grid;
-    grid-template-columns: 20% 50% 30%;
+    grid-template-columns: 20% 42% 40%;
     grid-template-rows: 100vh;
 }
 

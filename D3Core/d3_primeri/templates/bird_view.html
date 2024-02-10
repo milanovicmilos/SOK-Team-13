@@ -12,7 +12,9 @@
   stroke: #046ebd;
   stroke-width: 1.5px;
 }
-
+#bird_svg {
+    pointer-events: none;
+}
 </style>
     <script>
     function nodeClickBird(el) {
@@ -33,17 +35,12 @@
 {% endblock %}
 {% block bird_view_content %}
 <div>
-    <svg id="bird_svg" width="100%" height="669px">
-        <rect id="viewport" width="100" height="100" fill="none" stroke="red" stroke-width="2"></rect>
+    <svg id="bird_svg" width="570" height="650">
     </svg>
 </div>
 <script>
-    // Cvorovi grafa predstavljalu prodavnice i artikli.
-    let nodes1 = {
-        {% for  node in graph.nodes %}
-            "{{ node.node_id }}": {{ node.parsed_data }},
-        {% endfor %}
-    };
+
+
 
 
     function urlToValidId(url) {
@@ -64,140 +61,75 @@
         return url;
     }
 
+    let secondSvg = d3.select('#bird_svg')
+        .attr('width', 570) // Set the width of the SVG
+        .attr('height', 570) // Set the height of the SVG
+        .append('g');
 
-    let links1=[
-        {% for edge in graph.edges %}
-            {
-              source: "{{ edge.source_node.node_id }}",
-              target: "{{ edge.target_node.node_id }}"},
-        {% endfor %}
-    ];
+    secondSvg.attr('viewBox', '0 0 300 300')
+        .attr('preserveAspectRatio', 'xMidYMid meet');
 
-    links1.forEach(function(link) {
-        link.source = nodes1[link.source];
-        link.target = nodes1[link.target];
-    });
-    // Force layout vrsi numericku simulaciju n-tela (n-cestica).
-    // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/
-    let force1 = d3.layout.force() // kreiranje force layout-a
-        .size([350, 600]) // raspoloziv prostor za iscrtavanje
-        .nodes(d3.values(nodes1)) // dodavanje informacija o cvorovima grafa
-        .links(links1) // dodavanje informacije o ivicama grafa
-        .on("tick", tick)
-        .linkDistance(300) // duzina ivice grafa
-        .charge(-100) // koliko da se elementi odbijaju (pozitivna vrednost kaze koliko se elementi privlace)
-        .start(); //pokreni simulaciju
 
-    let svg1 = d3.select('#bird_svg') // Selektujemo svg element
-    .style('border', '1px solid black') // Add border style
-    .append('g'); // Append a group element for content
+    let birdViewportRect = secondSvg.append('rect')
+    .attr('id', 'birdViewportRect')
+    .attr('x', 0)      // Initial X position
+    .attr('y', 0)      // Initial Y position
+    .attr('width', 570) // Initial width
+    .attr('height', 570) // Initial height
+    .style('fill', 'none')
+    .style('stroke', 'blue')
+    .style('stroke-width', '2px');
 
-    // Define the viewBox and preserveAspectRatio attributes for a fixed-size view
-    svg1.attr('viewBox', '0 0 600 600')
-       .attr('preserveAspectRatio', 'xMidYMid meet');
+    function updateBirdViewportRect(translateX, translateY, scale) {
 
+        // Update the rectangle attributes based on the current transformation
+       birdViewportRect.attr('x', -translateX / scale)
+        .attr('y', -translateY / scale)
+        .attr('width', 570 / scale)
+        .attr('height', 570 / scale);
+    }
 
     // Stletno iscrtavanje linkova koji su prikazani linijama.
-    let link1 = svg1.selectAll('.link')
-        .data(links1)
-        .enter().append('line')
-        .attr('class', 'link')
-        .attr('x1', function(d) { return d.source.y; })
-        .attr('y1', function(d) { return d.source.x; })
-        .attr('x2', function(d) { return d.target.y; })
-        .attr('y2', function(d) { return d.target.x; });
+    let secondLink = secondSvg.selectAll('.link')
+    .data(links)
+    .enter().append('line')
+    .attr('class', 'link')
+    .attr('x1', function (d) { return d.source.y; })
+    .attr('y1', function (d) { return d.source.x; })
+    .attr('x2', function (d) { return d.target.y; })
+    .attr('y2', function (d) { return d.target.x; });
 
-    // Stletno iscrtavanje cvorova reprezentovanih g tagom.
-    let node1 = svg1.selectAll('.node')
-        .data(force1.nodes()) //add
-        .enter().append('g')
-        .attr('class', 'node')
-        .attr('id', function(d) { return urlToValidId(d.id); })
-        .on('click',function(){
-           nodeClickBird(this);
+let secondNode = secondSvg.selectAll('.node')
+    .data(force.nodes())
+    .enter().append('g')
+    .attr('class', 'node')
+    .attr('id', function (d) { return urlToValidId(d.id); });
+
+
+    if("{{ graph_name }}" === "SimpleVisualiser"){
+        secondNode.each(function (d) {
+            simpleView(d);
         });
-
-
-    // Sadrzaj svakog g taga iscrtavamo funkcijom slozenPrikaz.
-    d3.selectAll('.node').each(function(d){complicatedView(d);});
-
-    function complicatedView(d) {
-        // Funkcija zaduzena za iscrtavanje cvora grafa
-        let length = 20;
-        let textSize = 8;
-        let height = textSize;
-
-        // Iscrtavanje kruga.
-        d3.select("g#" + urlToValidId(d.id))
-            .append('circle')
-            .attr('r', 10) //radius of circle
-            .attr('fill','orange');
-
-        // Prikaz naziva nodea
-        d3.select("g#" + urlToValidId(d.id))
-            .append('text')
-            .attr('x', length / 2)
-            .attr('y', 10)
-            .attr('text-anchor', 'middle')
-            .attr('font-size', textSize)
-            .attr('font-family', 'sans-serif')
-            .attr('fill', 'black')
-            .text(urlToValidName(d.id));
-    }
-
-
-    function tick(e) {
-        node1.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
-
-        // Remove the drag behavior from node1
-        node1.on('.drag', null);
-
-        // Correct link positions
-        link1.attr('x1', function (d) {
-            return d.source.x;
-        })
-        .attr('y1', function (d) {
-            return d.source.y;
-        })
-        .attr('x2', function (d) {
-            return d.target.x;
-        })
-        .attr('y2', function (d) {
-            return d.target.y;
+    }else{
+        secondNode.each(function (d) {
+            complicatedView(d);
         });
     }
 
-    let viewport = d3.select('#viewport');
+     secondSvg.call(d3.behavior.zoom().on("zoom", function () {
+            console.log("Entered zoom")
+            // Disable zooming for the second SVG
+            d3.event.sourceEvent.preventDefault();
+            d3.event.sourceEvent.stopPropagation();
 
-    // Update the viewport that surround visible nodes
-    function update_viewport(visible_nodes) {
-
-        let bird_visible_nodes = [];
-        visible_nodes.forEach(function(node) {
-            d3.selectAll('.node').each(function(d){
-                if (d.id === node.id) {
-                    bird_visible_nodes.push(d);
-                }
-            });
-        });
-
+            const scale = 0.5; // Adjust the scale factor as needed
+            const translateX = d3.event.translate[0] * scale;
+            const translateY = d3.event.translate[1] * scale;
+            secondSvg.attr("transform", "translate(" + translateX + "," + translateY + ") scale(" + scale + ")");
+            updateBirdViewportRect(translateX, translateY, scale);
+        }));
 
 
-        let minX = d3.min(bird_visible_nodes, function(d) { return d.x; });
-        let minY = d3.min(bird_visible_nodes, function(d) { return d.y; });
-        let maxX = d3.max(bird_visible_nodes, function(d) { return d.x; });
-        let maxY = d3.max(bird_visible_nodes, function(d) { return d.y; });
-
-        let width = maxX - minX;
-        let height = maxY - minY;
-
-        viewport.attr('x', minX)
-            .attr('y', minY)
-            .attr('width', width)
-            .attr('height', height);
-    }
 
     function block_bird(node_id){
         console.log("vepar")
@@ -206,7 +138,7 @@
         if (!selectedNode.empty()) {
             console.log("prase")
             let currentColor = selectedNode.select('circle').attr('fill');
-            let newColor = currentColor === 'red' ? 'orange' : 'red';
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
             console.log("krme")
             selectedNode.selectAll('circle')
                 .attr('fill', newColor);
@@ -220,11 +152,12 @@
 
         if (!selectedNode.empty()) {
             console.log("prase")
-            let currentColor = selectedNode.select('circle').attr('fill');
-            let newColor = currentColor === 'red' ? 'orange' : 'red';
+            let currentColor = selectedNode.select('rect').attr('fill');
+            let newColor = currentColor === 'red' ? 'yellow' : 'red';
             console.log("krme")
-            selectedNode.selectAll('circle')
+            selectedNode.select('rect')
                 .attr('fill', newColor);
+            bird_tree(urlToValidId(node_id))
     }
     }
 

@@ -15,7 +15,7 @@ class SimpleVisualiser(Visualizer):
         return "SimpleVisualiser"
 
     def generate_html(self):
-        context = {"graph": self.graph}
+        context = {"graph": self.graph, "graph_name": self.name}
 
         env = Environment(loader=FileSystemLoader("../graph_visualiser/simple_visualiser/simple_vis"))
 

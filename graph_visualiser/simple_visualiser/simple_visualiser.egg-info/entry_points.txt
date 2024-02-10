@@ -1,0 +1,2 @@
+[graph_visualiser.visualizer]
+simple_visualiser = simple_vis.simple_visualizer:SimpleVisualiser
